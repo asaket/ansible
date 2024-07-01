@@ -9,7 +9,7 @@
     ocp_host_api: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_HOST_API') }}"
     ocp_user_name: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_USERNAME') }}"
     ocp_password: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_PASSWORD') }}"
-    ocp_namespace: ansible_demo
+    ocp_namespace: ansible-demo
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
