@@ -6,18 +6,18 @@
     #ocp_host_api: https://api.cluster-rclxq.rclxq.sandbox1046.opentlc.com:6443
     #ocp_user_name: kubeadmin
     #ocp_password: xxxxx
+    ocp_host_api: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_HOST_API') }}"
+    ocp_user_name: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_USERNAME') }}"
+    ocp_password: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_PASSWORD') }}"
     ocp_namespace: ansible_demo
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: Log in to OCP to obtain access token
       redhat.openshift.openshift_auth:
-        #host: "{{ ocp_host_api }}"
-        #username: "{{ ocp_user_name }}"
-        #password: "{{ ocp_password }}"
-        host: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_HOST_API') }}"
-        username: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_USERNAME') }}"
-        password: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_PASSWORD') }}"
+        host: "{{ ocp_host_api }}"
+        username: "{{ ocp_user_name }}"
+        password: "{{ ocp_password }}"
         validate_certs: false
       register: openshift_auth_results
 
