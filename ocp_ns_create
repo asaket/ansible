@@ -1,0 +1,35 @@
+---
+- name: Ansible to OpenShift Integration
+  hosts: localhost
+  gather_facts: false
+  vars:
+    #ocp_host_api: https://api.cluster-rclxq.rclxq.sandbox1046.opentlc.com:6443
+    #ocp_user_name: kubeadmin
+    #ocp_password: xxxxx
+    ocp_namespace: ansible_demo
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+    - name: Log in to OCP to obtain access token
+      redhat.openshift.openshift_auth:
+        #host: "{{ ocp_host_api }}"
+        #username: "{{ ocp_user_name }}"
+        #password: "{{ ocp_password }}"
+        host: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_HOST_API') }}"
+        username: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_USERNAME') }}"
+        password: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_PASSWORD') }}"
+        validate_certs: false
+      register: openshift_auth_results
+
+    - name: Create a namespace in OCP cluster
+      kubernetes.core.k8s:
+        host: "{{ ocp_host_api }}"
+        api_key: "{{ openshift_auth_results.openshift_auth.api_key }}"
+        kind: Namespace
+        name: "{{ ocp_namespace }}"
+        validate_certs: false
+      register: change_output
+
+    - name: Print details
+      ansible.builtin.debug:
+        msg: "{{ change_output }}"
