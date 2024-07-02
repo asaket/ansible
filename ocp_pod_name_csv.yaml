@@ -42,9 +42,15 @@
 
     - name: Print pods list as CSV
       ansible.builtin.debug:
-        msg: "{{ pods_csv }}"
+        msg: "{{ pods_csv | to_nice_csv }}"
       ignore_errors: true
 
+    - name: Write output to a csv file
+      ansible.builtin.copy:
+        content: "{{ pods_csv | to_nice_csv }}"
+        dest: /tmp/pod_list_1.csv
+      ignore_errors: true
+  
     - name: Print details
       ansible.builtin.debug:
         msg: "{{ change_output.resources | map(attribute='metadata.name') | join(', ') }}"
@@ -52,10 +58,16 @@
 
     - name: Print pod list in CSV table format
       ansible.builtin.debug:
-        msg: "{{ change_output | json_query('resources[*].{name: metadata.name, namespace: metadata.namespace, status: status.phase}') | map('join', ',') | join(' ') }}"
+        msg: "{{ change_output | community.general.json_query('resources[*].{name: metadata.name, namespace: metadata.namespace, status: status.phase}') | map('join', ',') | join(' ') }}"
       ignore_errors: true
 
     - name: Print pod list in table format
       ansible.builtin.debug:
         msg: "{{ change_output | to_nice_yaml }}"
+
+    - name: Write output to a csv file with pod name, number of running instances, running status, restarts, age
+      ansible.builtin.copy:
+        content: "{{ change_output | community.general.json_query('resources[*].{name: metadata.name, running_instances: status.containerStatuses[*].ready, running_status: status.containerStatuses[*].state.running, restarts: status.containerStatuses[*].restartCount, age: metadata.creationTimestamp}') | to_nice_csv }}"
+        dest: /tmp/pod_list_2.csv
+      ignore_errors: true
 ...
