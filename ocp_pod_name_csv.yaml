@@ -34,15 +34,21 @@
         validate_certs: false
       register: change_output
 
+    - name: Print pods list as CSV
+      ansible.builtin.debug:
+        msg: "{{ change_output }}"
+        
     - name: Format pods list as CSV
       ansible.builtin.set_fact:
         pods_csv: "{{ pods_csv | default('') }}{{ item.metadata.name }},{{ item.status.containerStatuses[0].ready }},{{ item.status.containerStatuses[0].state.terminated.reason
           }},{{ item.status.containerStatuses[0].restartCount }},{{ item.metadata.creationTimestamp }}\n"
       loop: "{{ change_output.resources }}"
+      ignore_errors: true
 
     - name: Print pods list as CSV
       ansible.builtin.debug:
         msg: "{{ pods_csv }}"
+      ignore_errors: true
 
     - name: Print details
       ansible.builtin.debug:
