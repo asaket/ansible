@@ -33,4 +33,12 @@
     - name: Print details
       ansible.builtin.debug:
         msg: "{{ change_output.resources | map(attribute='metadata.name') | join(', ') }}"
+
+    - name: Print pod list in CSV table format
+      ansible.builtin.debug:
+        msg: "{{ change_output | json_query('resources[*].{name: metadata.name, namespace: metadata.namespace, status: status.phase}') | map('join', ',') | join(' ') }}"
+
+    - name: Print pod list in table format
+      ansible.builtin.debug:
+        msg: "{{ change_output | to_nice_yaml }}"
 ...
