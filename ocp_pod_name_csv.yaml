@@ -42,12 +42,12 @@
 
     - name: Print pods list as CSV
       ansible.builtin.debug:
-        msg: "{{ pods_csv | to_nice_csv }}"
+        msg: "{{ pods_csv }}"
       ignore_errors: true
 
     - name: Write output to a csv file
       ansible.builtin.copy:
-        content: "{{ pods_csv | to_nice_csv }}"
+        content: "{{ pods_csv }}"
         dest: /tmp/pod_list_1.csv
       ignore_errors: true
   
