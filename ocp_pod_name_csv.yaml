@@ -50,6 +50,10 @@
         content: "{{ pods_csv }}"
         dest: /tmp/pod_list_1.csv
       ignore_errors: true
+
+    - name: Print the host name
+      ansible.builtin.debug:
+        var: ansible_hostname
   
     - name: Print details
       ansible.builtin.debug:
