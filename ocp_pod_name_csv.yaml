@@ -1,7 +1,7 @@
 ---
 - name: Ansible to OpenShift Integration
   hosts: localhost
-  gather_facts: false
+  gather_facts: true
   #ignore_errors: true
   collections:
     - community.general
