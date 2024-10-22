@@ -13,7 +13,7 @@
   hosts: localhost
   tasks:
     - name: Get resource quota from all namespaces
-      ansible.builtin.command: oc get resourcequotas -A -o json | jq -r '(["Namespace","requests.cpu","used.requests.cpu","limits.cpu","used.limits.cpu"] | @csv), (.items[] | [.metadata.namespace, .spec.hard["cpu"], .status.used["cpu"], .spec.hard["limits.cpu"], .status.used["limits.cpu"]] | @csv)'
+      ansible.builtin.command: oc get resourcequotas -A -o json | jq -r '([\"Namespace\",\"requests.cpu\",\"used.requests.cpu\",\"limits.cpu\",\"used.limits.cpu\"] | @csv), (.items[] | [.metadata.namespace, .spec.hard[\"cpu\"], .status.used[\"cpu\"], .spec.hard[\"limits.cpu\"], .status.used[\"limits.cpu\"]] | @csv)'
       register: result
     - name: Print result
       ansible.builtin.debug:
