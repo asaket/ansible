@@ -8,7 +8,7 @@
     ocp_password: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_PASSWORD') }}"
   tasks:
     - name: Log in to OpenShift
-      ansible.builtin.command: oc login --username={{ ocp_user_name }} --password={{ ocp_password }} --server={{ ocp_host_api }}
+      ansible.builtin.command: oc login --username={{ ocp_user_name }} --password={{ ocp_password }} --server={{ ocp_host_api }} --insecure-skip-tls-verify
 - name: Get resource quota from all namespaces
   hosts: localhost
   tasks:
