@@ -1,0 +1,20 @@
+---
+- name: Log in to OpenShift
+  hosts: localhost
+  gather_facts: false
+  vars:
+    ocp_host_api: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_HOST_API') }}"
+    ocp_user_name: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_USERNAME') }}"
+    ocp_password: "{{ lookup('ansible.builtin.env', 'OPENSHIFT_LOGIN_PASSWORD') }}"
+  tasks:
+    - name: Log in to OpenShift
+      ansible.builtin.command: oc login --username={{ ocp_user_name }} --password={{ ocp_password }} --server={{ ocp_host_api }}
+- name: Get resource quota from all namespaces
+  hosts: localhost
+  tasks:
+    - name: Get resource quota from all namespaces
+      ansible.builtin.command: oc get resourcequota --all-namespaces
+      register: result
+    - name: Print result
+      ansible.builtin.debug:
+        msg: "{{ result.stdout }}"
